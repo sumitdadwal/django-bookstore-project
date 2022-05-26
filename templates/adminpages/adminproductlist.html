@@ -7,7 +7,9 @@
     <din class="row">
         <div class="col-md-12">
             <h3>All Products</h3>
-            <a href="{% url 'ecomapp:adminproductcreate' %}">Add new product</a>
+            <hr>
+            <a href="{% url 'ecomadmin:adminproductcreate' %}">Add New Product</a>
+            <hr>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -16,18 +18,28 @@
                         <th>Image</th>
                         <th>Price</th>
                         <th>Views</th>
+                        <th>Update</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for product in allproducts %}
-                    <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{product.title}}</td>
-                            <td><img src="{{product.image.url}}" style="height: 75px;" alt=""></td>
-                            <td>{{product.selling_price}}</td>
-                            <td>{{product.view_count}}</td>
-                    </tr>
-                    {% endfor %}
+                    {% if user.is_authenticated %}
+                        
+                    
+                            {% for product in allproducts %}
+                                {% if user.admin == product.sold_by%}
+                            <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{product.title}}</td>
+                                    <td><img src="{{product.image.url}}" style="height: 75px;" alt=""></td>
+                                    <td>{{product.selling_price}}</td>
+                                    <td>{{product.view_count}}</td>
+                                    <td><a class="btn btn-secondary" href="{% url 'ecomadmin:adminproductupdate' product.id %}">Update</a></td>
+                                    <td><a class="btn btn-danger" href="{% url 'ecomadmin:adminproductdelete' product.id%}">Delete</a></td>
+                            </tr>
+                                {% endif %}
+                            {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>

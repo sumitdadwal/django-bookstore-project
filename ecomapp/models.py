@@ -2,34 +2,24 @@ from distutils.command.upload import upload
 from statistics import mode, quantiles
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
+from customerprofile.models import Customer
+from ecomadmin.models import Admin
 
-class Admin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=50)
-    image=models.ImageField(upload_to='admins')
-    mobile = models.CharField(max_length=20)
-    
-
-
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=200)
-    address = models.CharField(max_length=200, null=True, blank=True)
-    joined_on = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.full_name
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
+
+    def get_absolute_url(self):
+        return reverse('store:category_list', args=[self.slug])
 
     def __str__(self):
         return self.title
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
-    author = models.CharField(max_length=200, default='admin')
+    author = models.CharField(max_length=200, default='N/A')
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="images/")
@@ -39,6 +29,7 @@ class Product(models.Model):
     warranty = models.CharField(max_length=300, null=True, blank=True)
     return_policy = models.CharField(max_length=300, null=True, blank=True)
     view_count = models.PositiveBigIntegerField(default=0)
+    sold_by = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.title

@@ -11,7 +11,7 @@
             <h4>{{category.title}}</h4>
             <div class="row">
                 {% for product in category.product_set.all %}
-                    <div class="col-md-4 mb-3" >
+                    <div class="col-md-4 mb-3 card" >
                          <div class="m-4">
                             <h3> <a href="{% url 'ecomapp:productdetail' product.slug %}">{{product.title}}</a></h3>
                             <img class="img-fluid" style="height: 2500; object-fit: cover;" src="{{ product.image.url }}" alt="{{product.title}}" width="200">

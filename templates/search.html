@@ -15,6 +15,7 @@
                 </div>
                 <div class="col-md-8">
                     <h4><a href="{% url 'ecomapp:productdetail' result.slug %}">{{result.title}}</a></h4>
+                    <p>Author: {{result.author}}</p>
                     <p>{{result.description | truncatewords:20}}</p>
                     <p>Return Policy: {{result.return_policy}}</p>
                     <a href="{% url 'ecomapp:addtocart' result.id %}" class="btn btn-primary mb-3">Add to Cart</a>

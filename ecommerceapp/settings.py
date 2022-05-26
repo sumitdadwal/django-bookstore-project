@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ecomapp',
     'customerprofile',
+    'ecomadmin',
 ]
 
 MIDDLEWARE = [
@@ -131,9 +132,11 @@ LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'customerlogin'
 
 
-STRIPE_PUBLIC_KEY = ""
-STRIPE_SECRET_KEY = ""
-STRIPE_WEBHOOK_SECRET = ""
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "ecomappreset@gmail.com"
+EMAIL_HOST_PASSWORD = "Ecomapp..3221"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

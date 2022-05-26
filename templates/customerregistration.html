@@ -16,7 +16,7 @@
                 {% csrf_token %}
                 {{form.as_p}}
                 <button class="btn btn-primary">Register as a Customer</button>      
-                <p>Already have an account? <a href="{% url 'ecomapp:customerlogin' %}">Login Here</a></p>    
+                <p>Already have an account? <a href="{% url 'customerprofile:customerlogin' %}">Login Here</a></p>    
 
             </form>
         </div>

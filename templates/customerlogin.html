@@ -16,11 +16,12 @@
                 {% csrf_token %}
                 {{form.as_p}}
                 <button class="btn btn-primary">Login</button>  
-                <p>or don't have an accont? <a href="{% url 'ecomapp:customerregistration' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">Register Here</a></p>    
+                <p>or don't have an accont? <a href="{% url 'customerprofile:customerregistration' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">Register Here</a></p>    
                 {% if error %}
                  <li>{{error}}</li>
                 {% endif %}
             </form>
+            <p><a href="{% url 'customerprofile:passwordforgot' %}">Forgot Password?</a></p>
         </div>
     </div>
 </div>

@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("ecomapp.urls")),
-    path('profile/', include("customerprofile.urls")),
+    path('customer/', include("customerprofile.urls")),
+    path('bookstore-admin/', include("ecomadmin.urls"))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

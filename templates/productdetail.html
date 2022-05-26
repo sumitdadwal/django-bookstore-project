@@ -11,13 +11,17 @@
             <div class="row">
                 {% for pimage in product.productimage_set.all %}
                 <div class="col-md-4 p-3">
-                    <img src="{{pimage.image.url}}" class="img-fluid" alt="">
+                    <a href="{{pimage.image.url}}" target="blank">
+                        <img src="{{pimage.image.url}}" class="img-fluid" alt="">
+                    </a>
                 </div>
                 {% endfor %}
             </div>
         </div>
         <div class="col-md-8">
             <h4>{{product.title}}<h4>
+                <h5>Author: {{product.author}}</h5>
+                <h5>Sold by: {{product.sold_by.full_name}}</h5>
                 <h5>Category: {{product.category}}  (View Count: {{product.view_count}})</h5>
                 <h5>Price: <strike>${{product.marked_price}}</strike> ${{product.selling_price}}</h5>
                 <a href="{% url 'ecomapp:addtocart' product.id %}" class="btn btn-info">Add to Cart</a>
@@ -28,16 +32,6 @@
         </div>
 
         <!--Related Products-->
-        <h3 class"mt-4 mb-3 border-bottom pb-1">Related Products:</h3>
-        <div class="row">
-            {% for related_product in related_products %}
-            <div class="col-3 mb-4">
-                <div class="card shadow">
-                    
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
     </div>
     <hr>

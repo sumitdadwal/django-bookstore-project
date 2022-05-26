@@ -40,7 +40,7 @@
                     </tr>
                 </tbody>
             </table>
-            <form action="{% url 'ecomapp:adminorderchange' order_obj.id %}" method="POST">
+            <form action="{% url 'ecomadmin:adminorderchange' order_obj.id %}" method="POST">
                 {% csrf_token %}
                 <select name="status">
                     {% for i, j in allstatus %}
