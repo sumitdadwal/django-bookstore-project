@@ -70,6 +70,7 @@ class AddToCartView(EcomMixin,TemplateView):
                 cartproduct = this_product_in_cart.last()
                 cartproduct.quantity += 1 
                 cartproduct.subtotal += product_obj.selling_price
+                cartproduct.save()
                 cart_obj.total += product_obj.selling_price
                 cart_obj.save()
             else:
