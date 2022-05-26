@@ -117,7 +117,7 @@ class AdminProductUpdateView(AdminRequredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         prod_obj = self.get_object()
         if prod_obj.sold_by != self.request.user.admin:
-            raise Http404("NONONONON")
+            raise Http404("Not Authorised")
         return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):

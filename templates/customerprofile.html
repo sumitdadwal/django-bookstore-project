@@ -13,6 +13,10 @@
             <p><span class="font-weight-bold"><b>Email:</b></span> {{customer.user.email}}</p>
             <p><span class="font-weight-bold"><b>Address:</b></span> {{customer.address}}</p>
             <p><span class="font-weight-bold"><b>Joined on:</b></span> {{customer.joined_on}}</p>
+            <p>
+                <a class="btn btn-secondary" href="{% url 'customerprofile:customerupdateprofile' customer.id %}">Update Personal Info</a>
+                <span><a class="btn btn-secondary" href="{% url 'customerprofile:userupdate' %}">Update Settings</a></span>
+            </p>
 
         </div>
         <div class="col-md-8">

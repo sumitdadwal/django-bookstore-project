@@ -1,17 +1,11 @@
-from genericpath import exists
-from re import template
-from unicodedata import category
-from django import views
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
-from django.contrib.auth import authenticate, login, logout
-from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm, ProductForm, PasswordForgotForm, PasswordResetForm, ProductUpdateForm
+from django.shortcuts import redirect
+from django.views.generic import View, TemplateView, CreateView
+from django.urls import reverse_lazy
+from .forms import CheckoutForm
 from .models import *
 from django.db.models import Q
 from django.core.paginator import Paginator
-# from ..customerprofile.utils import password_reset_token
-# from django.core.mail import send_mail
+
 
 #assign customer to cart object
 class EcomMixin(object): 
@@ -55,9 +49,7 @@ class ProductDetailView(EcomMixin, TemplateView):
         product = Product.objects.get(slug=url_slug)
         product.view_count += 1
         product.save()
-        # related_products = Product.objects.filter(category==product.category)
         context['product'] = product
-        # context['related_products'] = related_products
         return context
 
 class AddToCartView(EcomMixin,TemplateView):
@@ -187,15 +179,10 @@ class CheckoutView(EcomMixin, CreateView):
             form.instance.total = cart_obj.total
             form.instance.order_status = 'Order Recieved'
             del self.request.session['cart_id']
-            # order = form.save()
-            # return redirect(reverse("ecomapp:createcheckoutsession"))
 
         else:
             return redirect('ecomapp:home')
         return super().form_valid(form)
-
-
-
 
 class SearchView(TemplateView):
     template_name= 'search.html'
@@ -206,120 +193,6 @@ class SearchView(TemplateView):
         results = Product.objects.filter(Q(title__contains=keyword) | Q(description__contains=keyword) | Q(return_policy__contains=keyword) | Q(author__contains=keyword))
         context['results'] = results
         return context
-
-
-# Admin pages:
-
-# class AdminLoginView(FormView):
-#     template_name = 'adminpages/adminlogin.html'
-#     form_class = CustomerLoginForm
-#     success_url = reverse_lazy('ecomapp:adminhome')
-
-#     def form_valid(self, form):
-#         username = form.cleaned_data.get('username')
-#         password = form.cleaned_data.get('password')
-#         usr = authenticate(username=username, password=password)
-#         if usr is not None and Admin.objects.filter(user=usr).exists():
-#             login(self.request, usr)
-#         else:
-#             return render(self.request, self.template_name, {'form': self.form_class, 'error': 'Invalid credentials'})
-#         return super().form_valid(form)
-
-
-
-
-# class AdminRequredMixin(object):
-#     def dispatch(self, request, *args, **kwargs):
-#         if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
-#             pass
-#         else:
-#             return redirect("/admin-login/")
-#         return super().dispatch(request, *args, **kwargs)
-
-
-
-
-
-
-# class AdminHomeView(AdminRequredMixin, TemplateView):
-#     template_name = 'adminpages/adminhome.html'
-
-#     def dispatch(self, request, *args, **kwargs):
-#         if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
-#             pass
-#         else:
-#             return redirect("/admin-login/")
-#         return super().dispatch(request, *args, **kwargs)
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['pendingorders'] = Order.objects.filter(order_status="Order Recieved").order_by('-id')
-#         return context
-
-
-
-# class AdminOrderDetailView(AdminRequredMixin, DetailView):
-#     template_name = 'adminpages/adminorderdetail.html'
-#     model = Order
-#     context_object_name = 'order_obj'
-
-#     def get_context_data(self, **kwargs):
-#         context =  super().get_context_data(**kwargs)
-#         context['allstatus'] = ORDER_STATUS
-#         return context
-
-# class AdminOrderListView(AdminRequredMixin, ListView):
-#     template_name = 'adminpages/adminorderlist.html'
-#     queryset = Order.objects.all().order_by('-id')
-#     context_object_name = 'allorders'
-
-# class  AdminOrderStatusChangeView(AdminRequredMixin ,View):
-#     def post(self, request, *args, **kwargs):
-#         order_id = self.kwargs["pk"]
-#         order_obj = Order.objects.get(id=order_id)
-#         new_status = request.POST.get('status')
-#         order_obj.order_status = new_status
-#         order_obj.save()
-#         return redirect(reverse_lazy("ecomapp:adminorderdetail", kwargs={'pk': order_id}))
-
-# class AdminProductListView(AdminRequredMixin, ListView):
-#     template_name = 'adminpages/adminproductlist.html' 
-#     queryset = Product.objects.all().order_by("-id")
-#     context_object_name = "allproducts"
-
-# class AdminProductCreateView(AdminRequredMixin, CreateView):
-#     template_name = "adminpages/adminproductcreate.html"
-#     form_class = ProductForm
-#     success_url = reverse_lazy("ecomapp:adminproductlist")
-
-#     def form_valid(self, form):
-#         prod = form.save()
-#         images = self.request.FILES.getlist("more_images") 
-#         for i in images:
-#             ProductImage.objects.create(product=prod, image=i)
-#         return super().form_valid(form)
-
-# class AdminProductUpdateView(AdminRequredMixin, UpdateView):
-#     template_name = "adminpages/adminproductupdate.html"
-#     form_class = ProductForm
-#     success_url=  reverse_lazy("ecomapp:adminproductlist")
-#     queryset = Product.objects.all()
-    
-#     def form_valid(self, form):
-#         prod = form.save()
-#         images = self.request.FILES.getlist("more_images") 
-#         for i in images:
-#             ProductImage.objects.create(product=prod, image=i)
-#         return super().form_valid(form)
-
-# class AdminProductDeleteView(AdminRequredMixin, DeleteView):
-#     model = Product
-#     template_name = 'adminpages/adminproductdelete.html'
-#     success_url = reverse_lazy('ecomapp:adminproductlist')
-
-    
-    
-
 
 class AboutView(EcomMixin, TemplateView):
     template_name = "about.html"

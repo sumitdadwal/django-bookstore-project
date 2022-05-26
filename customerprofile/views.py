@@ -2,7 +2,7 @@ from genericpath import exists
 from django import views
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import View, TemplateView, CreateView, FormView, DetailView
+from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from ecomapp.forms import *
@@ -10,6 +10,8 @@ from .models import *
 from .utils import password_reset_token
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import Http404
+
 
 
 
@@ -21,7 +23,7 @@ class CustomerProfileView(TemplateView):
         if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
             pass
         else:
-            return redirect("/login?next=/checkout/")
+            return redirect("/customer/login?next=/checkout/")
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -72,6 +74,39 @@ class CustomerRegistrationView(CreateView):
             return next_url
         else:
             return self.success_url
+
+class CustomerUpdateProfileView(UpdateView):
+    template_name = "customerupdateprofile.html"
+    model = Customer
+    fields = ['full_name', 'address']
+
+    success_url = reverse_lazy("customerprofile:customerprofile")
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+class UserUpdate(UpdateView):
+    template_name = "userupdate.html"
+    model = User
+    fields = ['username', 'email']
+    success_url = reverse_lazy("customerprofile:customerprofile")
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        queryset = queryset.filter(pk=self.request.user.pk)
+
+        try:
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404("No user found")
+        return obj
+
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class CustomerLogoutView(View):
