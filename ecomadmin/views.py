@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from django.shortcuts import redirect, render
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from ecomapp.forms import  CustomerLoginForm, ProductForm
 from .models import *
@@ -26,16 +26,6 @@ class AdminLoginView(FormView):
         return super().form_valid(form)
 
 
-# class AdminMixin(object): 
-#     def dispatch(self, request, *args, **kwargs):
-#         prod_id = request.session.get("prod_id")
-#         if prod_id:
-#             prod_obj = Product.objects.get(id=prod_id)
-#             if request.user.is_authenticated and Admin.objects.filter(user=request.user):
-#                 prod_obj.admin = request.user.admin
-#                 prod_obj.save()
-#         return super().dispatch(request, *args, **kwargs)
-
 class AdminRequredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
@@ -43,10 +33,6 @@ class AdminRequredMixin(object):
         else:
             return redirect("/bookstore-admin/login/")
         return super().dispatch(request, *args, **kwargs)
-
-
-
-
 
 
 class AdminHomeView(AdminRequredMixin, TemplateView):

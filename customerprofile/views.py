@@ -1,5 +1,3 @@
-from genericpath import exists
-from django import views
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, UpdateView
