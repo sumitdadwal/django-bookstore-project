@@ -1,14 +1,20 @@
 from genericpath import exists
 from re import template
+from unicodedata import category
 from django import views
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
-from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
+from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm, ProductForm
 from .models import *
 from django.db.models import Q
+from django.core.paginator import Paginator
+import stripe
+from django.conf import settings
+from django.http import JsonResponse
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 #assign customer to cart object
 class EcomMixin(object): 
@@ -27,7 +33,11 @@ class HomeView(EcomMixin, TemplateView):
     template_name = "home.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['all_products'] = Product.objects.all()
+        product_list = Product.objects.all().order_by("-id")
+        paginator = Paginator(product_list, 4)
+        page_number = self.request.GET.get('page')
+        all_products = paginator.get_page(page_number)
+        context['all_products'] = all_products
         return context
 
 
@@ -47,7 +57,9 @@ class ProductDetailView(EcomMixin, TemplateView):
         product = Product.objects.get(slug=url_slug)
         product.view_count += 1
         product.save()
+        # related_products = Product.objects.filter(category==product.category)
         context['product'] = product
+        # context['related_products'] = related_products
         return context
 
 class AddToCartView(EcomMixin,TemplateView):
@@ -177,6 +189,9 @@ class CheckoutView(EcomMixin, CreateView):
             form.instance.total = cart_obj.total
             form.instance.order_status = 'Order Recieved'
             del self.request.session['cart_id']
+            # order = form.save()
+            # return redirect(reverse("ecomapp:createcheckoutsession"))
+
         else:
             return redirect('ecomapp:home')
         return super().form_valid(form)
@@ -320,7 +335,15 @@ class  AdminOrderStatusChangeView(AdminRequredMixin ,View):
         order_obj.save()
         return redirect(reverse_lazy("ecomapp:adminorderdetail", kwargs={'pk': order_id}))
 
+class AdminProductListView(AdminRequredMixin, ListView):
+    template_name = 'adminpages/adminproductlist.html' 
+    queryset = Product.objects.all().order_by("-id")
+    context_object_name = "allproducts"
 
+class AdminProductCreateView(AdminRequredMixin, CreateView):
+    template_name = "adminpages/adminproductcreate.html"
+    form_class = ProductForm
+    success_url = reverse_lazy("ecomapp:adminproductlist")
 
 class AboutView(EcomMixin, TemplateView):
     template_name = "about.html"

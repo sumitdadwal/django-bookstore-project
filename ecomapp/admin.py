@@ -12,4 +12,4 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'slug', 'author', 'category', 'marked_price', 'selling_price']
     prepopulated_fields = {'slug': ('title',)}
 
-admin.site.register([Admin, Cart, CartProduct, Order, Customer])
+admin.site.register([Admin, Cart, CartProduct, Order, Customer, ProductImage])
