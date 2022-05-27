@@ -13,7 +13,13 @@
         <a href="{% url 'ecomadmin:adminhome' %}">Home</a> |
         <a href="{% url 'ecomadmin:adminorderlist' %}">All Orders</a> |
         <a href="{% url 'ecomadmin:adminproductlist' %}">All Products</a> |
-        <a href="{% url 'ecomapp:home' %}" target='blank'>Visit site</a>
+        <a href="{% url 'ecomapp:home' %}" target='blank'>Visit site</a> |
+
+        {% if request.user.admin %}
+            <a href="{% url 'ecomadmin:adminlogout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'ecomadmin:adminlogin' %}">Login</a>
+        {% endif %}
     </div>
     {% block content %}
     {% endblock %}

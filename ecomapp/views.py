@@ -5,7 +5,7 @@ from .forms import CheckoutForm
 from .models import *
 from django.db.models import Q
 from django.core.paginator import Paginator
-
+from django.core.cache import cache
 
 #assign customer to cart object
 class EcomMixin(object): 

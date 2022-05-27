@@ -1,0 +1,25 @@
+{% extends 'adminpages/adminbase.html' %}
+
+{% block title %}Register as a Seller{% endblock title %}
+
+{% block content %}
+<style>
+    .errorlist{
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h3>Seller Registration Form</h3>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary">Register as a Seller</button>      
+                <p>Already have an account? <a href="{% url 'ecomadmin:adminlogin' %}">Login Here</a></p>    
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

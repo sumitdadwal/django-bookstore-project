@@ -92,6 +92,14 @@
                             </li>
             
                         {% endif %}
+
+                        <li class="nav-item ">
+                          {% if request.user.admin %}
+                            <a class="nav-link" href="{% url 'ecomadmin:adminlogout' %}">Logut as Seller</a>
+                          {% else %}
+                            <a class="nav-link" href="{% url 'ecomadmin:adminregister' %}">Sell</a>
+                          {% endif %}
+                        </li>
                     </ul>
                     <form class="d-flex" role="search" action="{% url 'ecomapp:search' %}" method="GET">
                       <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search" required>

@@ -10,3 +10,6 @@ class Admin(models.Model):
     full_name = models.CharField(max_length=50)
     image=models.ImageField(upload_to='admins')
     mobile = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.full_name

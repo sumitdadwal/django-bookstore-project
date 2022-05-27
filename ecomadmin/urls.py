@@ -5,6 +5,8 @@ app_name = "ecomadmin"
 
 urlpatterns = [
     path('login/', AdminLoginView.as_view(), name='adminlogin'),
+    path('logout/', AdminLogoutView.as_view(), name='adminlogout'),
+    path('register/', AdminegistrationView.as_view(), name='adminregister'),
     path('product/list/', AdminProductListView.as_view(), name="adminproductlist"),
     path("product/add/", AdminProductCreateView.as_view(), name="adminproductcreate"),
     path('home/', AdminHomeView.as_view(), name='adminhome'),

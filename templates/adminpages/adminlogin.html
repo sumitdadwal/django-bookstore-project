@@ -16,6 +16,7 @@
                 {% csrf_token %}
                 {{form.as_p}}
                 <button class="btn btn-primary">Login as Admin</button>  
+                <p>or dont't have an account? <a href="{% url 'ecomadmin:adminregister' %}">Register Here</a></p>
                 {% if error %}
                  <li>{{error}}</li>
                 {% endif %}

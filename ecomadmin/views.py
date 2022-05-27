@@ -1,10 +1,10 @@
 from django.http import Http404
 from django.shortcuts import render
-
+from .forms import AdminRegistrationForm
 from django.shortcuts import redirect, render
 from django.views.generic import View, TemplateView, CreateView, FormView, DetailView, ListView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from ecomapp.forms import  CustomerLoginForm, ProductForm
 from .models import *
 from ecomapp.models import ProductImage, Product, Order, ORDER_STATUS
@@ -24,6 +24,11 @@ class AdminLoginView(FormView):
         else:
             return render(self.request, self.template_name, {'form': self.form_class, 'error': 'Invalid credentials'})
         return super().form_valid(form)
+
+class AdminLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect("ecomapp:home")
 
 
 class AdminRequredMixin(object):
@@ -49,6 +54,21 @@ class AdminHomeView(AdminRequredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['pendingorders'] = Order.objects.filter(order_status="Order Recieved").order_by('-id')
         return context
+
+
+class AdminegistrationView(CreateView):
+    template_name = 'adminpages/adminregistration.html'
+    form_class = AdminRegistrationForm
+    success_url = reverse_lazy("ecomadmin:adminhome")
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        email = form.cleaned_data.get("email")
+        user = User.objects.create_user(username, email, password)
+        form.instance.user = user
+        login(self.request, user)
+        return super().form_valid(form)
 
 
 
