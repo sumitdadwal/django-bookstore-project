@@ -9,19 +9,34 @@
     <title>{% block title%} {% endblock %}</title>
 </head>
 <body>
-    <div class="container">
-        <a href="{% url 'ecomadmin:adminhome' %}">Home</a> |
-        <a href="{% url 'ecomadmin:adminorderlist' %}">All Orders</a> |
-        <a href="{% url 'ecomadmin:adminproductlist' %}">All Products</a> |
-        <a href="{% url 'ecomapp:home' %}" target='blank'>Visit site</a> |
-
-        {% if request.user.admin %}
-            <a href="{% url 'ecomadmin:adminlogout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'ecomadmin:adminlogin' %}">Login</a>
-        {% endif %}
+    <div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'ecomadmin:adminhome' %}">Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'ecomadmin:adminorderlist' %}">All Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'ecomadmin:adminproductlist' %}">All Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ecomapp:home' %}" target='blank'>Visit Site</a>
+            </li>
+            <li class="nav-item">
+                {% if request.user.admin %}
+                    <a class="nav-link" href="{% url 'ecomadmin:adminlogout' %}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'ecomadmin:adminlogin' %}">Login</a>
+                {% endif %}
+            </li>
+          </ul>
+        </div>
+      </nav>
+      {% block content %}
+        {% endblock %}
     </div>
-    {% block content %}
-    {% endblock %}
 </body>
 </html>
