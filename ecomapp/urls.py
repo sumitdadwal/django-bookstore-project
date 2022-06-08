@@ -5,10 +5,10 @@ from .views import *
 app_name = "ecomapp"
 
 urlpatterns = [
-    path("", HomeView.as_view(), name="home"),
+    path("", home, name="home"),
     path("about/", AboutView.as_view(), name="about"),
     path("contact/", ContactView.as_view(), name="contact"),
-    path("categories/", CategoryView.as_view(), name="categories"),
+    path("categories/", categories, name="categories"),
     path("product/<slug:slug>", ProductDetailView.as_view(), name="productdetail"),
     path("add-to-cart-<int:pro_id>/", AddToCartView.as_view(), name="addtocart"),
     path("cart/", CartView.as_view(), name="cart"),

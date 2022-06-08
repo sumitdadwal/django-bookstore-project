@@ -56,7 +56,7 @@ class AdminHomeView(AdminRequredMixin, TemplateView):
         return context
 
 
-class AdminegistrationView(CreateView):
+class AdminRegistrationView(CreateView):
     template_name = 'adminpages/adminregistration.html'
     form_class = AdminRegistrationForm
     success_url = reverse_lazy("ecomadmin:adminhome")

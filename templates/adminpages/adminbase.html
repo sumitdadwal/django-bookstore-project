@@ -29,7 +29,7 @@
                 {% if request.user.admin %}
                     <a class="nav-link" href="{% url 'ecomadmin:adminlogout' %}">Logout</a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'ecomadmin:adminlogin' %}">Login</a>
+                    <a class="nav-link" href="{% url 'ecomadmin:adminlogin' %}">Login as seller</a>
                 {% endif %}
             </li>
           </ul>

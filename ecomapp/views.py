@@ -1,5 +1,5 @@
-from django.shortcuts import redirect
-from django.views.generic import View, TemplateView, CreateView
+from django.shortcuts import redirect, render
+from django.views.generic import View, TemplateView, CreateView, DetailView
 from django.urls import reverse_lazy
 from .forms import CheckoutForm
 from .models import *
@@ -20,26 +20,34 @@ class EcomMixin(object):
     
 
 
-class HomeView(EcomMixin, TemplateView):
-    template_name = "home.html"
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        product_list = Product.objects.all().order_by("-id")
-        paginator = Paginator(product_list, 8)
-        page_number = self.request.GET.get('page')
-        all_products = paginator.get_page(page_number)
-        context['all_products'] = all_products
-        return context
+# class HomeView(EcomMixin, TemplateView):
+#     template_name = "home.html"
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         product_list = Product.objects.all().order_by("-id")
+#         paginator = Paginator(product_list, 8)
+#         page_number = self.request.GET.get('page')
+#         all_products = paginator.get_page(page_number)
+#         context['all_products'] = all_products
+#         return context
+
+def home(request):
+    all_products = Product.objects.all().order_by('-id')
+    return render(request, "home.html", {'all_products': all_products})
 
 
 
-class CategoryView(EcomMixin, TemplateView):
-    template_name = "categories.html"
+# class CategoryView(EcomMixin, TemplateView):
+#     template_name = "categories.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['all_categories'] = Category.objects.all()
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['all_categories'] = Category.objects.all()
+#         return context
+def categories(request):
+    all_categories = Category.objects.all()
+    return render(request, "categories.html", {'all_categories': all_categories})
+
 
 class ProductDetailView(EcomMixin, TemplateView):
     template_name = "productdetail.html"
@@ -51,6 +59,10 @@ class ProductDetailView(EcomMixin, TemplateView):
         product.save()
         context['product'] = product
         return context
+
+
+
+
 
 class AddToCartView(EcomMixin,TemplateView):
     template_name = "addtocart.html"
