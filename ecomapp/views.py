@@ -32,8 +32,11 @@ class EcomMixin(object):
 #         return context
 
 def home(request):
-    all_products = Product.objects.all().order_by('-id')
-    return render(request, "home.html", {'all_products': all_products})
+    product_list = Product.objects.all().order_by("-id")
+    paginator = Paginator(product_list, 8)
+    page_number = request.GET.get('page')
+    all_products = paginator.get_page(page_number)
+    return render(request, "home.html", {'all_products': all_products, 'product_list':product_list,'paginator':paginator, 'page_number':page_number})
 
 
 
