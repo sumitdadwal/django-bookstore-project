@@ -31,8 +31,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ.get('DEBUG_VALUE') == 'TRUE')
-
+# DEBUG = (os.environ.get('DEBUG_VALUE') == 'TRUE')
+DEBUG = True
 ALLOWED_HOSTS = ['murmuring-oasis-10953.herokuapp.com', 'localhost', '127.0.0.1']
 
 
@@ -173,7 +173,6 @@ AWS_QUERYSTRING_AUTH = False
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_S3_ADDRESSING_STYLE = 'virtual'
