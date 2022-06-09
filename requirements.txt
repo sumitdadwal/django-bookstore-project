@@ -12,7 +12,6 @@ django-heroku==0.3.1
 django-redis==5.2.0
 django-storages==1.12.3
 gunicorn==20.1.0
-heroku==0.1.4
 heroku3==5.1.4
 idna==3.3
 jmespath==1.0.0
