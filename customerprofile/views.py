@@ -13,7 +13,6 @@ from django.http import Http404
 
 
 
-
 class CustomerProfileView(TemplateView):
     template_name = 'customerprofile.html'
 
